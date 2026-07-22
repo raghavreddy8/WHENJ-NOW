@@ -1,99 +1,64 @@
-from pathlib import Path
 from datetime import datetime, timezone
-import json
+from app.database.database import SessionLocal
+from app.database.models.article import ArticleModel
 
 
 class ArticleStore:
 
-    def __init__(self):
-
-        self.storage_path = (
-            Path(__file__).resolve()
-            .parent.parent
-            / "storage"
-            / "today_articles.json"
-        )
-
-    def _today(self):
-        return datetime.now(timezone.utc).date().isoformat()
-
-    def _load(self):
-        default_data = {
-            "date": self._today(),
-            "articles": []
-        }
-
-        if not self.storage_path.exists():
-            self._save(default_data)
-            return default_data
-
-        try:
-            with open(self.storage_path, "r", encoding="utf-8") as f:
-
-                content = f.read().strip()
-
-                if not content:
-                    self._save(default_data)
-                    return default_data
-
-                return json.loads(content)
-
-        except json.JSONDecodeError:
-            self._save(default_data)
-            return default_data
-
-    def _save(self, data):
-
-        with open(self.storage_path, "w", encoding="utf-8") as f:
-            json.dump(
-                data,
-                f,
-                indent=4,
-                ensure_ascii=False
-            )
-
     def add_articles(self, articles):
-
-        data = self._load()
-
-        today = self._today()
-
-        if data["date"] != today:
-            data = {
-                "date": today,
-                "articles": []
+        db = SessionLocal()
+        try:
+            # Query existing links to avoid inserting duplicate entries
+            existing_links = {
+                link_tuple[0] for link_tuple in db.query(ArticleModel.link).all()
             }
 
-        existing_links = {
-            article["link"]
-            for article in data["articles"]
-        }
-
-        for article in articles:
-
-            article_dict = article.model_dump(mode="json")
-
-            if article_dict["link"] not in existing_links:
-                data["articles"].insert(
-                    0,
-                    article_dict
-                )
-
-        self._save(data)
+            for article in articles:
+                if article.link not in existing_links:
+                    db_article = ArticleModel(
+                        title=article.title,
+                        summary=article.summary,
+                        link=article.link,
+                        source=article.source,
+                        published=article.published,
+                        intelligence_summary=article.intelligence_summary,
+                        importance=article.importance
+                    )
+                    db.add(db_article)
+            db.commit()
+        finally:
+            db.close()
 
     def get_articles(self):
-        data = self._load()
-            
-        if data["date"] != self._today():
+        db = SessionLocal()
+        try:
+            # Get start of today (UTC)
+            today_start = datetime.now(timezone.utc).replace(
+                hour=0, minute=0, second=0, microsecond=0
+            )
 
-            data = {
-                "date": self._today(),
-                "articles": []
-            }
+            # Retrieve articles created/processed today (UTC), sorted by publication date descending
+            articles = (
+                db.query(ArticleModel)
+                .filter(ArticleModel.created_at >= today_start)
+                .order_by(ArticleModel.published.desc())
+                .all()
+            )
 
-            self._save(data)
-
-        return data["articles"]
+            return [
+                {
+                    "title": a.title,
+                    "summary": a.summary,
+                    "link": a.link,
+                    "source": a.source,
+                    "published": a.published.isoformat() if a.published else None,
+                    "intelligence_summary": a.intelligence_summary,
+                    "importance": a.importance
+                }
+                for a in articles
+            ]
+        finally:
+            db.close()
 
 
 article_store = ArticleStore()
