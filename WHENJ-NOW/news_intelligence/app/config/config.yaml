@@ -1,0 +1,76 @@
+app:
+  name: "WHENJ News Intelligence"
+  environment: "development"
+
+llm:
+  gemini:
+    model: "gemini-2.0-flash"
+  openrouter:
+    model: "openai/gpt-4o-mini"
+
+scheduler:
+  interval_hours: 1
+
+rss_feeds:
+  - name: Google News
+    url: https://news.google.com/rss?hl=en-IN&gl=IN&ceid=IN:en
+
+  - name: Analytics India Magazine
+    url: https://zdpdvwhvukelzzbzbjvh.supabase.co/functions/v1/rss-feed
+
+  - name: Dev.to
+    url: https://dev.to/feed/
+
+  - name: Tech-Economic Times
+    url: https://economictimes.indiatimes.com/tech/rssfeeds/13357270.cms
+
+  - name: Wired AI
+    url: https://www.wired.com/feed/tag/ai/latest/rss
+
+  - name: InfoQ AI ML
+    url: https://feed.infoq.com/ai-ml-data-eng
+
+  - name: Tech Crunch
+    url: https://techcrunch.com/feed/
+
+  - name: ZDNet
+    url: https://www.zdnet.com/news/rss.xml
+
+  - name: HackerNews
+    url: https://feeds.feedburner.com/TheHackersNews
+
+  - name: Bleeping Computer
+    url: https://www.bleepingcomputer.com/feed/
+
+  - name: Phoronix
+    url: https://www.phoronix.com/rss.php
+
+  - name: Planet Python
+    url: https://planetpython.org/rss20.xml
+
+  - name: Ars Technica
+    url: https://feeds.arstechnica.com/arstechnica/index
+
+  - name: The Verge
+    url: https://www.theverge.com/rss/index.xml
+
+  - name: Live Mint Tech
+    url: https://www.livemint.com/rss/technology
+
+  - name: Toms Hardware
+    url: https://www.tomshardware.com/feeds.xml
+
+  - name: Indian Express Tech
+    url: https://indianexpress.com/section/technology/feed/
+
+  - name: Hindustan Times Tech
+    url: https://www.hindustantimes.com/feeds/rss/technology/rssfeed.xml
+
+  - name: The Hindu
+    url: https://www.thehindu.com/feeder/default.rss
+
+  - name: The Times of India
+    url: https://timesofindia.indiatimes.com/rssfeedsvideomostrecent.cms
+
+  - name: OpenAI News
+    url: https://openai.com/news/rss.xml

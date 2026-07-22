@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>WHENJ</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="stylesheet"
+          href="css/styles.css">
+
+</head>
+
+<body class="bg-slate-950 text-white">
+
+    <!-- Navbar -->
+
+    <header class="navbar">
+
+        <div class="container">
+
+            <h1 class="logo">
+                WHENJ
+            </h1>
+
+            <p class="subtitle">
+                News Intelligence
+            </p>
+
+        </div>
+
+    </header>
+
+    <!-- Main -->
+
+    <main class="container mt-8">
+
+        <!-- Search -->
+
+        <input
+            id="searchInput"
+            type="text"
+            placeholder="Search articles..."
+            class="search-box"
+        >
+
+        <p
+            id="lastUpdated"
+            class="last-updated"
+        >
+            Last Updated
+        </p>
+
+        <!-- Cards -->
+
+        <div
+            id="articlesContainer"
+            class="space-y-6 mt-8"
+        >
+
+        </div>
+
+    </main>
+
+    <script type="module"
+            src="scripts/app.js"></script>
+
+</body>
+
+</html>
