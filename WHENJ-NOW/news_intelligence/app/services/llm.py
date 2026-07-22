@@ -28,9 +28,12 @@ def _call_gemini(prompt: str) -> str:
     api_key = os.getenv("GOOGLE_API_KEY")
     config = load_config()
 
-    genai.configure(api_key=api_key)
-    model = genai.GenerativeModel(config.llm.gemini.model)
-    response = model.generate_content(prompt)
+    # New google-genai SDK uses Client-based API (google-generativeai is deprecated)
+    client = genai.Client(api_key=api_key)
+    response = client.models.generate_content(
+        model=config.llm.gemini.model,
+        contents=prompt
+    )
     return response.text
 
 
