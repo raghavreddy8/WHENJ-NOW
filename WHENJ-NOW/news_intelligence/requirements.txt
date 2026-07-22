@@ -10,7 +10,7 @@ fastapi
 uvicorn
 
 # LLM providers (direct SDKs — no LangChain)
-google-generativeai==0.8.6
+google-genai==0.8.6
 openai==2.46.0
 
 # Database driver
