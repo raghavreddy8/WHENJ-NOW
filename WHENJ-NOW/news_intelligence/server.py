@@ -34,9 +34,9 @@ app = FastAPI(
 )
 
 origins = [
+    "https://whenj-now.vercel.app/",
     "http://127.0.0.1:5500",
     "http://127.0.0.2:5500",
-    "http://localhost:5500"
 ]
 
 frontend_url = os.getenv("FRONTEND_URL")
